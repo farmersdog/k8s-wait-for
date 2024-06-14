@@ -43,7 +43,7 @@ jobs:
       - name: Run Trivy Vulnerability Scanner for Root Image
         uses: aquasecurity/trivy-action@master
         with:
-          image-ref: 'ghcr.io/groundnuty/k8s-wait-for:latest'
+          image-ref: 'k8s-wait-for:latest'
           exit-code: 1
           format: 'sarif'
           output: 'trivy-results-root.sarif'
@@ -51,7 +51,7 @@ jobs:
       - name: Run Trivy Vulnerability Scanner for Non-Root Image
         uses: aquasecurity/trivy-action@master
         with:
-          image-ref: 'ghcr.io/groundnuty/k8s-wait-for:no-root-latest'
+          image-ref: 'k8s-wait-for:no-root-latest'
           exit-code: 1
           format: 'sarif'
           output: 'trivy-results-non-root.sarif'
