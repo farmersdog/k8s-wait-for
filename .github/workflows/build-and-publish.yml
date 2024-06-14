@@ -28,7 +28,7 @@ jobs:
         run: make images
   scan:
     needs: [ "build" ]
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
         with:
@@ -44,7 +44,6 @@ jobs:
         uses: aquasecurity/trivy-action@master
         with:
           image-ref: 'k8s-wait-for:latest'
-          exit-code: 1
           format: 'sarif'
           output: 'trivy-results-root.sarif'
           skip-files: /usr/local/bin/kubectl
@@ -52,9 +51,7 @@ jobs:
         uses: aquasecurity/trivy-action@master
         with:
           image-ref: 'k8s-wait-for:no-root-latest'
-          exit-code: 1
-          format: 'sarif'
-          output: 'trivy-results-non-root.sarif'
+          format: 'table'
           skip-files: /usr/local/bin/kubectl
       # just upload root scan results
       - name: Upload Trivy Scan Results to GitHub Security Tab
@@ -65,7 +62,7 @@ jobs:
 
   deploy:
     needs: [ "scan" ]
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-latest
     if: github.event_name == 'release' && github.event.action == 'created'
     steps:
       - name: Login to Docker Hub

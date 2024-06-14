@@ -1,10 +1,10 @@
-FROM alpine:3.20.0
+FROM alpine:3.20
 
 ENV KUBE_LATEST_VERSION="v1.28.0"
 ENV TARGETARCH="amd64"
 
 RUN apk add --update --no-cache curl jq \
-    && curl -L https://storage.googleapis.com/kubernetes-release/release/${KUBE_LATEST_VERSION}/bin/linux/$TARGETARCH/kubectl -o /usr/local/bin/kubectl \
+    && curl -L "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl" -o /usr/local/bin/kubectl \
     && chmod +x /usr/local/bin/kubectl
 
 # Replace for non-root version
