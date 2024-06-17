@@ -6,8 +6,6 @@ BUILDER_NAME = k8s-wait-for-builder
 NON_ROOT_DOCKERFILE = DockerfileNonRoot
 DOCKER_TAGS = $(REPO_NAME):$(TAG_PREFIX)latest $(REPO_NAME):$(TAG_PREFIX)$(TAG)
 
-all: push
-
 images: image-root image-non-root
 
 image-root: image-root
@@ -24,13 +22,10 @@ image-%:
 	if ! docker buildx inspect $(BUILDER_NAME) 2> /dev/null ; then docker buildx create --name $(BUILDER_NAME) ; fi
 	docker buildx build \
 		--builder=$(BUILDER_NAME) \
+		--platform=linux/amd64 \
 		$(BUILD_FLAGS) \
 		$(foreach TAG,$(DOCKER_TAGS),--tag $(TAG)) \
 		.
-
-push: BUILD_FLAGS := $(BUILD_FLAGS:--load=)
-push: BUILD_FLAGS += --push
-push: image-root image-non-root
 
 clean:
 	rm -f $(NON_ROOT_DOCKERFILE)
